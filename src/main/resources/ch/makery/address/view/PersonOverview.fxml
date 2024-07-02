@@ -61,10 +61,10 @@
                   </GridPane>
                   <ButtonBar layoutX="65.0" layoutY="338.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                     <buttons>
-                      <Button mnemonicParsing="false" text="Back" />
-                        <Button mnemonicParsing="false" text="Edit" />
-                        <Button mnemonicParsing="false" text="Delete" />
-                        <Button mnemonicParsing="false" text="Button" />
+                      <Button mnemonicParsing="false" onAction="#handleBack" text="Back" />
+                        <Button mnemonicParsing="false" onAction="#handleEditPerson" text="Edit" />
+                        <Button mnemonicParsing="false" onAction="#handleDeletePerson" text="Delete" />
+                        <Button mnemonicParsing="false" onAction="#handleNewPerson" text="New" />
                     </buttons>
                   </ButtonBar>
                </children>

@@ -1,10 +1,14 @@
 package ch.makery.address.view
 import ch.makery.address.model.Person
 import ch.makery.address.MainApp
-import scalafx.scene.control.{TableView, TableColumn, Label}
+import scalafx.scene.control.{Alert, Label, TableColumn, TableView}
 import scalafxml.core.macros.sfxml
-import scalafx.beans.property.{StringProperty}
+import scalafx.beans.property.StringProperty
 import ch.makery.address.util.DateUtil._
+import scalafx.event.ActionEvent
+import scalafx.Includes._
+import scalafx.application.JFXApp
+import scalafx.scene.control.Alert.AlertType
 
 @sfxml
 class PersonOverviewController(
@@ -46,8 +50,51 @@ class PersonOverviewController(
     }
   }
 
+  def handleDeletePerson(action : ActionEvent) = {
+    val selectedIndex = personTable.selectionModel().selectedIndex.value
+    if (selectedIndex >= 0) {
+      personTable.items().remove(selectedIndex);
+    } else {
+    // Nothing selected.
+    val alert = new Alert(AlertType.Error){
+      initOwner(MainApp.stage)
+      title       = "No Selection"
+      headerText  = "No Person Selected"
+      contentText = "Please select a person in the table."
+    }.showAndWait()
+  }
+}
+
+  def handleNewPerson(action : ActionEvent) = {
+    val person = new Person("","")
+    val okClicked = MainApp.showPersonEditDialog(person);
+    if (okClicked) {
+      MainApp.personData += person
+    }
+  }
+  def handleEditPerson(action : ActionEvent) = {
+    val selectedPerson = personTable.selectionModel().selectedItem.value
+    if (selectedPerson != null) {
+      val okClicked = MainApp.showPersonEditDialog(selectedPerson)
+
+      if (okClicked) showPersonDetails(Some(selectedPerson))
+
+    } else {
+      // Nothing selected.
+      val alert = new Alert(Alert.AlertType.Warning){
+        initOwner(MainApp.stage)
+        title       = "No Selection"
+        headerText  = "No Person Selected"
+        contentText = "Please select a person in the table."
+      }.showAndWait()
+    }
+  }
+
+def handleBack(action : ActionEvent) = {
+  MainApp.showWelcome()
+}
+  //--------------------------------------------------------------------------------
   // initialize Table View display contents model
-  personTable.items = MainApp.personData
   // initialize columns's cell values
   firstNameColumn.cellValueFactory = {
     _.value.firstName
